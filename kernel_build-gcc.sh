@@ -24,12 +24,12 @@ git clone --depth=1 https://github.com/mvaisakh/gcc-arm64
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/$DEVICE_CODENAME # IMPORTANT ! Fill with your kernel source root directory.
 DEVICE_DEFCONFIG=$DEVICE_DEFCONFIG # IMPORTANT ! Declare your kernel source defconfig file here.
-CLANG_ROOTDIR=$(pwd)/gcc-arm64 # IMPORTANT! Put your clang directory here.
+GCC_ROOTDIR=$(pwd)/gcc-arm64 # IMPORTANT! Put your clang directory here.
 export KBUILD_BUILD_USER=$BUILD_USER # Change with your own name or else.
 export KBUILD_BUILD_HOST=$BUILD_HOST # Change with your own hostname.
 
 # Main Declaration
-CLANG_VER="$("$CLANG_ROOTDIR"/bin/aarch64-elf-gcc --version | head -n 1 | cut -d ')' -f 2 | awk '{print $1}')"
+GCC_VER="$("$CLANG_ROOTDIR"/bin/aarch64-elf-gcc --version | head -n 1 | cut -d ')' -f 2 | awk '{print $1}')"
 export KBUILD_COMPILER_STRING="$CLANG_VER"
 IMAGE=$(pwd)/$DEVICE_CODENAME/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
@@ -71,14 +71,8 @@ tg_post_msg "<b>xKernelCompiler:</b><code>Compilation has started"
 cd ${KERNEL_ROOTDIR}
 make -j$(nproc) O=out ARCH=arm64 ${DEVICE_DEFCONFIG}
 make -j$(nproc) ARCH=arm64 O=out \
-    CC=${CLANG_ROOTDIR}/bin/aarch64-elf-gcc
-    AR=${CLANG_ROOTDIR}/bin/llvm-ar \
-  	NM=${CLANG_ROOTDIR}/bin/llvm-nm \  	
-	OBJCOPY=${CLANG_ROOTDIR}/bin/llvm-objcopy \
-  	OBJDUMP=${CLANG_ROOTDIR}/bin/llvm-objdump \
-    STRIP=${CLANG_ROOTDIR}/bin/llvm-strip \
     CROSS_COMPILE=${CLANG_ROOTDIR}/bin/aarch64-elf- \
-    CROSS_COMPILE_ARM32=$(pwd)gcc-arm/bin/arm-eabi-
+    CROSS_COMPILE_ARM32=/drone/src/gcc-arm/bin/arm-eabi-
    
    if ! [ -a "$IMAGE" ]; then
 	finerr
