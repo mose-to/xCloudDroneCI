@@ -24,12 +24,12 @@ git clone --depth=1 https://github.com/mvaisakh/gcc-arm64
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/$DEVICE_CODENAME # IMPORTANT ! Fill with your kernel source root directory.
 DEVICE_DEFCONFIG=$DEVICE_DEFCONFIG # IMPORTANT ! Declare your kernel source defconfig file here.
-GCC_ROOTDIR=$(pwd)/gcc-arm64 # IMPORTANT! Put your clang directory here.
+CLANG_ROOTDIR=$(pwd)/gcc-arm64 # IMPORTANT! Put your clang directory here.
 export KBUILD_BUILD_USER=$BUILD_USER # Change with your own name or else.
 export KBUILD_BUILD_HOST=$BUILD_HOST # Change with your own hostname.
 
 # Main Declaration
-GCC_VER="$("$CLANG_ROOTDIR"/bin/aarch64-elf-gcc --version | head -n 1 | cut -d ')' -f 2 | awk '{print $1}')"
+CLANG_VER="$("$CLANG_ROOTDIR"/bin/aarch64-elf-gcc --version | head -n 1 | cut -d ')' -f 2 | awk '{print $1}')"
 export KBUILD_COMPILER_STRING="$CLANG_VER"
 IMAGE=$(pwd)/$DEVICE_CODENAME/out/arch/arm64/boot/Image.gz-dtb
 DATE=$(date +"%F-%S")
