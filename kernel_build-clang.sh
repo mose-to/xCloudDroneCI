@@ -18,12 +18,12 @@
 echo "Downloading few Dependecies . . ."
 # Kernel Sources
 git clone --depth=1 $KERNEL_SOURCE $KERNEL_BRANCH $DEVICE_CODENAME
-git clone --depth=1 https://github.com/mose-to/general-clang general # xRageTC set as Clang Default
+git clone --depth=1 https://github.com/kdrag0n/proton-clang proton # xRageTC set as Clang Default
 
 # Main Declaration
 KERNEL_ROOTDIR=$(pwd)/$DEVICE_CODENAME # IMPORTANT ! Fill with your kernel source root directory.
 DEVICE_DEFCONFIG=$DEVICE_DEFCONFIG # IMPORTANT ! Declare your kernel source defconfig file here.
-CLANG_ROOTDIR=$(pwd)/general # IMPORTANT! Put your clang directory here.
+CLANG_ROOTDIR=$(pwd)/proton # IMPORTANT! Put your clang directory here.
 export KBUILD_BUILD_USER=$BUILD_USER # Change with your own name or else.
 export KBUILD_BUILD_HOST=$BUILD_HOST # Change with your own hostname.
 
@@ -69,7 +69,7 @@ tg_post_msg "<b>xKernelCompiler</b>%0ABuilder Name : <code>${KBUILD_BUILD_USER}<
 compile(){
 tg_post_msg "<b>xKernelCompiler:</b><code>Compilation has started"
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 ${DEVICE_DEFCONFIG}
+make -j$(nproc) O=out ARCH=arm64 ${DEVICE_DEFCONFIG} savedefconfig
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
     AR=${CLANG_ROOTDIR}/bin/llvm-ar \
