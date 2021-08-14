@@ -73,13 +73,17 @@ make -j$(nproc) O=out ARCH=arm64 ${DEVICE_DEFCONFIG} savedefconfig
 cp out/defconfig arch/arm64/configs/${DEVICE_DEFCONFIG}
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
+    LD=${CLANG_ROOTDIR}/bin/ld.lld \
     AR=${CLANG_ROOTDIR}/bin/llvm-ar \
+    AS=${CLANG_ROOTDIR}/bin/llvm-as \
   	NM=${CLANG_ROOTDIR}/bin/llvm-nm \
   	OBJCOPY=${CLANG_ROOTDIR}/bin/llvm-objcopy \
   	OBJDUMP=${CLANG_ROOTDIR}/bin/llvm-objdump \
     STRIP=${CLANG_ROOTDIR}/bin/llvm-strip \
     CROSS_COMPILE=${CLANG_ROOTDIR}/bin/aarch64-linux-gnu- \
     CROSS_COMPILE_ARM32=${CLANG_ROOTDIR}/bin/arm-linux-gnueabi-
+    image.gz-dtb
+    dtbo.img
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
