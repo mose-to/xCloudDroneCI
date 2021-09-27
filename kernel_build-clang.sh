@@ -26,7 +26,6 @@ DEVICE_DEFCONFIG=$DEVICE_DEFCONFIG # IMPORTANT ! Declare your kernel source defc
 CLANG_ROOTDIR=$(pwd)/general # IMPORTANT! Put your clang directory here.
 export KBUILD_BUILD_USER=$BUILD_USER # Change with your own name or else.
 export KBUILD_BUILD_HOST=$BUILD_HOST # Change with your own hostname.
-
 CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 LLD_VER="$("$CLANG_ROOTDIR"/bin/ld.lld --version | head -n 1)"
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
@@ -67,23 +66,20 @@ tg_post_msg "<code>Compiling...</code>%0ABuilder Name : <code>${KBUILD_BUILD_USE
 
 # Compile
 compile(){
-tg_post_msg "<b>xKernelCompiler:</b><code>Compilation has started"
+tg_post_msg "<b>xKernelCompiler:</b><code>Compilation has started</code>"
 cd ${KERNEL_ROOTDIR}
-make -j$(nproc) O=out ARCH=arm64 ${DEVICE_DEFCONFIG} savedefconfig
-cp out/defconfig arch/arm64/configs/${DEVICE_DEFCONFIG}
+make -j$(nproc) O=out ARCH=arm64 ${DEVICE_DEFCONFIG}
 make -j$(nproc) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
     LD=${CLANG_ROOTDIR}/bin/ld.lld \
     AR=${CLANG_ROOTDIR}/bin/llvm-ar \
     AS=${CLANG_ROOTDIR}/bin/llvm-as \
-  	NM=${CLANG_ROOTDIR}/bin/llvm-nm \
-  	OBJCOPY=${CLANG_ROOTDIR}/bin/llvm-objcopy \
-  	OBJDUMP=${CLANG_ROOTDIR}/bin/llvm-objdump \
+    NM=${CLANG_ROOTDIR}/bin/llvm-nm \
+    OBJCOPY=${CLANG_ROOTDIR}/bin/llvm-objcopy \
+    OBJDUMP=${CLANG_ROOTDIR}/bin/llvm-objdump \
     STRIP=${CLANG_ROOTDIR}/bin/llvm-strip \
     CROSS_COMPILE=${CLANG_ROOTDIR}/bin/aarch64-linux-gnu- \
     CROSS_COMPILE_ARM32=${CLANG_ROOTDIR}/bin/arm-linux-gnueabi-
-    image.gz-dtb
-    dtbo.img
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
